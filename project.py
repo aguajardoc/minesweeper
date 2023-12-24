@@ -57,7 +57,7 @@ def mine_counter(difficulty, screen, num=0):
         case 30:
             count = 99 + num
 
-    counter_font = pygame.font.Font("Seven-Segment.ttf", 32)   
+    counter_font = pygame.font.Font("static/Seven-Segment.ttf", 32)   
     counter_text =  counter_font.render("Mines:" + str(count), False, (255, 0, 0))
     screen.blit(counter_text, (450, 0))
     pygame.display.flip()
@@ -92,7 +92,7 @@ def windowinit():
     ### Show title
 
     # Minesweeper font, size 52
-    title_font = pygame.font.Font("mine-sweeper.ttf", 42)
+    title_font = pygame.font.Font("static/mine-sweeper.ttf", 42)
 
     # Render the "MINESWEEPER" text, white
     title_text = title_font.render("MINESWEEPER", False, (255, 255, 255))
@@ -211,7 +211,7 @@ def get_cell(pos: int, alpha: int) -> int:
 
 def place_flag(row, column, alpha, screen):
 
-    flag = pygame.image.load("flag.png").convert()
+    flag = pygame.image.load("static/flag.png").convert()
 
     size = get_size(alpha)
     
@@ -251,7 +251,7 @@ def show_cell(row, column, alpha, screen, numbered_board, clicked, difficulty):
     if numbered_board[(row, column)] == -1:
         game_over(row, column, alpha, screen, numbered_board, clicked, difficulty)
     elif numbered_board[(row, column)] != 0:
-        num_font = pygame.font.Font("mine-sweeper.ttf", 7 * alpha)
+        num_font = pygame.font.Font("static/mine-sweeper.ttf", 7 * alpha)
         mine_count = num_font.render(f"{numbered_board[(row, column)]}", False, colors[numbered_board[(row, column)] - 1])
 
         size = get_size(alpha)
@@ -328,8 +328,8 @@ def get_size(alpha):
         
 
 def game_over(row, column, alpha, screen, numbered_board, clicked, difficulty):
-    mine = pygame.image.load("bomb-red.png").convert()
-    mine_others = pygame.image.load("bomb-gray.png").convert()
+    mine = pygame.image.load("static/bomb-red.png").convert()
+    mine_others = pygame.image.load("static/bomb-gray.png").convert()
 
     size = get_size(alpha)
     
@@ -357,7 +357,7 @@ def difficulty_drawer(screen, rect_color, rect_position, text, text_color):
 
     pygame.draw.rect(screen, rect_color, rect_position)
     
-    font = pygame.font.Font("mine-sweeper.ttf", 34)
+    font = pygame.font.Font("static/mine-sweeper.ttf", 34)
     text_surface = font.render(text, True, text_color)
     text_rect = text_surface.get_rect(center=(rect_position[0] + rect_position[2] // 2, rect_position[1] + rect_position[3] // 2))
 
