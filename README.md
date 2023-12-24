@@ -1,4 +1,4 @@
-## Minesweeper
+## Minesweeper [WIP]
 
 Experimenting with pygame :)
 
