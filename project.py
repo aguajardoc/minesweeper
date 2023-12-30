@@ -17,6 +17,7 @@ def main():
 
     # "Place" the mines based on their locations by implementing the number logic
     numbered_board = place_mines(mine_locations)
+    print(numbered_board)
 
     # Show remaining mines:
     mine_counter(screen)
@@ -104,6 +105,7 @@ def running(alpha, numbered_board, screen):
     while runs:
 
         for event in pygame.event.get():
+            print(len(clicked))
 
             if event.type == pygame.QUIT:
                 runs = False
@@ -148,7 +150,6 @@ def running(alpha, numbered_board, screen):
                             place_flag(row, column, alpha, screen)
                             ct -= 1
                             mine_counter(screen, ct)
-            print(len(clicked))
 
 
 def chord(row, column, alpha, numbered_board, screen, flagged, clicked):
@@ -157,14 +158,16 @@ def chord(row, column, alpha, numbered_board, screen, flagged, clicked):
     for i in range(-1, 2):
         for j in range(-1, 2):
             if not (i == 0 and j == 0):
-                if [row + i, column + j] in flagged and (row + i >= 0 and column + j >= 0) and (row + i < 9 and column + j < 9):
+                if [row + i, column + j] in flagged and (row + i >= 0 and column + j >= 0) and (
+                        row + i < 9 and column + j < 9):
                     close_flags += 1
 
     if numbered_board[(row, column)] == close_flags and numbered_board[(row, column)] != 0:
         for i in range(-1, 2):
             for j in range(-1, 2):
                 if not (i == 0 and j == 0):
-                    if [row + i, column + j] not in clicked and [row + i, column + j] not in flagged and (row + i >= 0 and column + j >= 0) and (row + i < 9 and column + j < 9):
+                    if [row + i, column + j] not in clicked and [row + i, column + j] not in flagged and (
+                            row + i >= 0 and column + j >= 0) and (row + i < 9 and column + j < 9):
                         show_cell(row + i, column + j, alpha, screen, numbered_board, clicked)
                         clicked.append([row + i, column + j])
     return clicked
@@ -254,75 +257,30 @@ def show_cell(row, column, alpha, screen, numbered_board, clicked):
 def cascading_0s(row, column, alpha, screen, numbered_board, clicked):
     if [row, column] not in clicked:
         clicked.append([row, column])
-    size = get_size()
 
-    x = 10 + column * (size[0] + alpha)
-    y = 10 + row * (size[1] + alpha)
+        size = get_size()
 
-    # Draw a rectangle of area size^2 in the x,y position, gray
-    pygame.draw.rect(screen, (128, 128, 128), (x, y, size[0], size[1]))
+        x = 10 + column * (size[0] + alpha)
+        y = 10 + row * (size[1] + alpha)
 
-    # Check all surrounding squares for zeroes
-    if row + 1 < 9 and column + 1 < 9 and numbered_board[(row + 1, column + 1)] == 0 and [row + 1,
-                                                                                          column + 1] not in clicked:
-        cascading_0s(row + 1, column + 1, alpha, screen, numbered_board, clicked)
-    if row + 1 < 9 and column - 1 >= 0 and numbered_board[(row + 1, column - 1)] == 0 and [row + 1,
-                                                                                           column - 1] not in clicked:
-        cascading_0s(row + 1, column - 1, alpha, screen, numbered_board, clicked)
-    if row - 1 >= 0 and column + 1 < 9 and numbered_board[(row - 1, column + 1)] == 0 and [row - 1,
-                                                                                           column + 1] not in clicked:
-        cascading_0s(row - 1, column + 1, alpha, screen, numbered_board, clicked)
-    if row - 1 >= 0 and column - 1 >= 0 and numbered_board[(row - 1, column - 1)] == 0 and [row - 1,
-                                                                                            column - 1] not in clicked:
-        cascading_0s(row - 1, column - 1, alpha, screen, numbered_board, clicked)
-    if row - 1 >= 0 and column >= 0 and numbered_board[(row - 1, column)] == 0 and [row - 1, column] not in clicked:
-        cascading_0s(row - 1, column, alpha, screen, numbered_board, clicked)
-    if row + 1 < 9 and column >= 0 and numbered_board[(row + 1, column)] == 0 and [row + 1, column] not in clicked:
-        cascading_0s(row + 1, column, alpha, screen, numbered_board, clicked)
-    if row >= 0 and column - 1 >= 0 and numbered_board[(row, column - 1)] == 0 and [row, column - 1] not in clicked:
-        cascading_0s(row, column - 1, alpha, screen, numbered_board, clicked)
-    if row >= 0 and column + 1 < 9 and numbered_board[(row, column + 1)] == 0 and [row, column + 1] not in clicked:
-        cascading_0s(row, column + 1, alpha, screen, numbered_board, clicked)
+        # Draw a rectangle of area size^2 in the x,y position, gray
+        pygame.draw.rect(screen, (128, 128, 128), (x, y, size[0], size[1]))
 
-    # if it's a number other than 0, show that cell. This ends the cycle
-    if row + 1 < 9 and column + 1 < 9 and numbered_board[(row + 1, column + 1)] > 0 and [row + 1,
-                                                                                         column + 1] not in clicked:
-        if [row + 1, column + 1] not in clicked:
-            clicked.append([row + 1, column + 1])
-        show_cell(row + 1, column + 1, alpha, screen, numbered_board, clicked)
-    if row + 1 < 9 and column - 1 >= 0 and numbered_board[(row + 1, column - 1)] > 0 and [row + 1,
-                                                                                          column - 1] not in clicked:
-        if [row + 1, column - 1] not in clicked:
-            clicked.append([row + 1, column - 1])
-        show_cell(row + 1, column - 1, alpha, screen, numbered_board, clicked)
-    if row - 1 >= 0 and column + 1 < 9 and numbered_board[(row - 1, column + 1)] > 0 and [row - 1,
-                                                                                          column + 1] not in clicked:
-        if [row - 1, column + 1] not in clicked:
-            clicked.append([row - 1, column + 1])
-        show_cell(row - 1, column + 1, alpha, screen, numbered_board, clicked)
-    if row - 1 >= 0 and column - 1 >= 0 and numbered_board[(row - 1, column - 1)] > 0 and [row - 1,
-                                                                                           column - 1] not in clicked:
-        if [row - 1, column - 1] not in clicked:
-            clicked.append([row - 1, column - 1])
-        show_cell(row - 1, column - 1, alpha, screen, numbered_board, clicked)
-    if row - 1 >= 0 and column >= 0 and numbered_board[(row - 1, column)] > 0 and [row - 1, column] not in clicked:
-        if [row - 1, column] not in clicked:
-            clicked.append([row - 1, column])
-        show_cell(row - 1, column, alpha, screen, numbered_board, clicked)
-    if row + 1 < 9 and column >= 0 and numbered_board[(row + 1, column)] > 0 and [row + 1, column] not in clicked:
-        if [row + 1, column] not in clicked:
-            clicked.append([row + 1, column])
-        show_cell(row + 1, column, alpha, screen, numbered_board, clicked)
-    if row >= 0 and column - 1 >= 0 and numbered_board[(row, column - 1)] > 0 and [row, column - 1] not in clicked:
-        if [row, column - 1] not in clicked:
-            clicked.append([row, column - 1])
-        show_cell(row, column - 1, alpha, screen, numbered_board, clicked)
-    if row >= 0 and column + 1 < 9 and numbered_board[(row, column + 1)] > 0 and [row, column + 1] not in clicked:
-        if [row, column + 1] not in clicked:
-            clicked.append([row, column + 1])
-        show_cell(row, column + 1, alpha, screen, numbered_board, clicked)
+        # Check all surrounding squares for non-mines
+        for i in range(-1, 2):
+            for j in range(-1, 2):
+                if (not (i == 0 and j == 0) and 0 <= row + i < 9 and 0 <= column + j < 9 and
+                        [row + i, column + j] not in clicked):
+                    # If it's a zero, keep checking (by calling the function again)
+                    if numbered_board[(row + i, column + j)] == 0:
+                        cascading_0s(row + i, column + j, alpha, screen, numbered_board, clicked)
 
-    pygame.display.flip()
+                    # Else if it's not a mine, just show that cell and end the cycle
+                    elif numbered_board[(row + i, column + j)] > 0:
+                        clicked.append([row + i, column + j])
+                        show_cell(row + i, column + j, alpha, screen, numbered_board, clicked)
+
+        pygame.display.flip()
     return clicked
 
 
@@ -420,113 +378,24 @@ def place_mines(locations: list[list[int]], size=9) -> dict:
     for row in range(size):
         for column in range(size):
 
-            if [row, column] not in locations:
-
-                # Check (literal) edge cases accordingly
-                if row == 0 and column == 0:
-                    if [1, 0] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [0, 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [1, 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-
-                elif row == size - 1 and column == size - 1:
-                    if [size - 1, size - 2] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [size - 2, size - 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [size - 2, size - 2] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-
-                elif row == size - 1 and column == 0:
-                    if [size - 1, 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [size - 2, 0] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [size - 2, 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-
-                elif row == 0 and column == size - 1:
-                    if [1, size - 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [0, size - 2] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [1, size - 2] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-
-                elif row == 0:
-                    if [0, column - 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [0, column + 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [1, column - 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [1, column] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [1, column + 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-
-                elif column == 0:
-                    if [row - 1, 0] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [row + 1, 0] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [row - 1, 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [row, 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [row + 1, 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-
-                elif row == size - 1:
-                    if [size - 1, column - 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [size - 1, column + 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [size - 2, column - 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [size - 2, column] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [size - 2, column + 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-
-                elif column == size - 1:
-                    if [row - 1, size - 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [row + 1, size - 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [row - 1, size - 2] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [row, size - 2] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [row + 1, size - 2] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-
-                # Treat all center cells
-                else:
-                    if [row - 1, column - 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [row - 1, column] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [row - 1, column + 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [row, column - 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [row, column + 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [row + 1, column - 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [row + 1, column] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-                    if [row + 1, column + 1] in locations:
-                        adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0) + 1
-
-                adjacent_mines[(row, column)] = adjacent_mines.get((row, column), 0)
-
-            # Bomb cells will have a value of -1 for easy access
+            if [row, column] in locations:
+                # Bomb cells are assigned a value of -1
+                adjacent_mines[(row, column)] = - 1
             else:
-                adjacent_mines[(row, column)] = adjacent_mines.get((row, column), -1)
+                adj_count = 0
+
+                # Loop that checks for adjacent mines in the case that the cell itself is not a mine
+                for i in range(-1, 2):
+                    for j in range(-1, 2):
+
+                        # Ignore the cell itself, as we want the mines next to it
+                        if not (i == 0 and j == 0):
+                            # If the adjacent cell exists (by being between (0,0) and (size - 1, size - 1)),
+                            # and it has a mine
+                            if 0 <= row + i < size and 0 <= column + j < size and [row + i, column + j] in locations:
+                                adj_count += 1
+
+                adjacent_mines[(row, column)] = adj_count
 
     return adjacent_mines
 
