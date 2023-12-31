@@ -4,7 +4,7 @@
 
    I aimed to practice and garner a deeper understanding of Python so, design-wise, it is minimalistic. The exception to this is the usage of custom fonts, and that of images of a mine and of a flag. All of these were directed towards a faithful and appropriately ambienced recreation of the original game; mine-sweeper font for the numbers in the board, Seven Segment for the mine counter, and the mine and flag images for the mines and the flags, coming directly from Microsoft's Minesweeper.
 
-  ## project.py
+  ## game.py
 
   Handles all the logic required for the game to occur.
 
@@ -14,7 +14,7 @@
   4. A mine counter is displayed, showing the user how many mines are left, starting from 10.
   5. The game runs normally. If a mine is clicked, either directly or by chording, the game ends and a game over screen is displayed, along with the number of cells that the player safely uncovered. If a cell is right-clicked, and it is not uncovered, a flag can be placed and removed. If a player uncovers all of the safe mines, a win screen is displayed along with the time taken to complete the game, using Python's time library.
 
-  ## test_project.py
+  ## test_game.py
 
   This file handles the testing for all the functions that return values; get_cell, get_size, and win_condition.
 
