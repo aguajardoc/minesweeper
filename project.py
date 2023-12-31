@@ -178,7 +178,6 @@ def running(alpha: int, numbered_board: dict, screen) -> None:
     while runs:
 
         for event in pygame.event.get():
-            print(len(clicked))
 
             # If user closes the window, end game
             if event.type == pygame.QUIT:
@@ -218,7 +217,8 @@ def running(alpha: int, numbered_board: dict, screen) -> None:
 
                             # If it's not a mine, add the cell to the list of clicked cells
                             else:
-                                clicked.append([row, column])
+                                if [row, column] not in clicked:
+                                    clicked.append([row, column])
 
                         # If the cell had been clicked, check if it can be "chorded" (which handles extra concatenations
                         # to the clicked list).
@@ -226,7 +226,7 @@ def running(alpha: int, numbered_board: dict, screen) -> None:
                             clicked = chord(row, column, alpha, numbered_board, screen, flagged, clicked)
 
                             # Check if the max cells have been clicked by way of the length of clicked. If so, win.
-                            if len(clicked) >= 71:
+                            if len(clicked) == 71:
                                 time_end = time.time()
                                 time_elapsed = time_end - time_start
                                 win(screen, time_elapsed)
@@ -234,19 +234,20 @@ def running(alpha: int, numbered_board: dict, screen) -> None:
                     # If it's a right click
                     elif event.button == 3:
 
-                        # If it has been flagged before, remove the flag and update the mine counter
-                        if [row, column] in flagged:
-                            flagged.remove([row, column])
-                            remove_flag(row, column, alpha, screen)
-                            ct += 1
-                            mine_counter(screen, ct)
+                        if [row, column] not in clicked:
+                            # If it has been flagged before, remove the flag and update the mine counter
+                            if [row, column] in flagged:
+                                flagged.remove([row, column])
+                                remove_flag(row, column, alpha, screen)
+                                ct += 1
+                                mine_counter(screen, ct)
 
-                        # If the max number of flags hasn't been placed, add a flag and update the mine counter
-                        elif len(flagged) < 10:
-                            flagged.append([row, column])
-                            place_flag(row, column, alpha, screen)
-                            ct -= 1
-                            mine_counter(screen, ct)
+                            # If the max number of flags hasn't been placed, add a flag and update the mine counter
+                            elif len(flagged) < 10:
+                                flagged.append([row, column])
+                                place_flag(row, column, alpha, screen)
+                                ct -= 1
+                                mine_counter(screen, ct)
 
 
 def chord(row: int, column: int, alpha: int, numbered_board: dict, screen, flagged: list, clicked: list) -> list:
@@ -270,7 +271,9 @@ def chord(row: int, column: int, alpha: int, numbered_board: dict, screen, flagg
                     if [row + i, column + j] not in clicked and [row + i, column + j] not in flagged and (
                             row + i >= 0 and column + j >= 0) and (row + i < 9 and column + j < 9):
                         show_cell(row + i, column + j, alpha, screen, numbered_board, clicked)
-                        clicked.append([row + i, column + j])
+                        if [row + i, column + j] not in clicked:
+                            clicked.append([row + i, column + j])
+
     return clicked
 
 
@@ -354,7 +357,6 @@ def show_cell(row: int, column: int, alpha: int, screen, numbered_board: dict, c
         num_font = pygame.font.Font("static/mine-sweeper.ttf", 7 * alpha)
         mine_count = num_font.render(f"{numbered_board[(row, column)]}", False,
                                      colors[numbered_board[(row, column)] - 1])
-
         size = get_size()
 
         x = 10 + 3.5 * alpha + column * (size[0] + alpha)
@@ -396,7 +398,10 @@ def cascading_0s(row: int, column: int, alpha: int, screen, numbered_board: dict
 
                     # Else if it's not a mine, just show that cell and end the cycle.
                     elif numbered_board[(row + i, column + j)] > 0:
-                        clicked.append([row + i, column + j])
+
+                        if [row + i, column + j] not in clicked:
+                            clicked.append([row + i, column + j])
+
                         show_cell(row + i, column + j, alpha, screen, numbered_board, clicked)
 
         pygame.display.flip()
