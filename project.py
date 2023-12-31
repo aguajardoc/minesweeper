@@ -464,3 +464,11 @@ def play_button(screen: pygame, rect_color: tuple, rect_position: pygame, text: 
 
 if __name__ == "__main__":
     main()
+
+'''
+References:
+
+Gezoda. (2018, March). MINE-SWEEPER. Fontstruct. https://fontstruct.com/fontstructions/show/1501665/mine-sweeper
+Krafti Lab. (2018, July). Seven Segment. Dafont.com. https://www.dafont.com/seven-segment.font
+Johnson, C. (1990). Minesweeper (Online Version) [Video Game]. Microsoft.
+'''
