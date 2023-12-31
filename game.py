@@ -468,7 +468,6 @@ def play_button(screen: pygame, rect_color: tuple, rect_position: pygame, text: 
 def win_condition(clicked: list) -> bool:
     """Check if the max cells have been clicked by way of the length of clicked. If so, win."""
     if len(clicked) == 71:
-        print(clicked)
         return True
     return False
 
