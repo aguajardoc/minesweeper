@@ -5,7 +5,7 @@ import math
 import time
 
 
-def main():
+def main() -> None:
     """Outline of the actions that occur during the game"""
 
     # Initializes the game window and fetches the play button object
@@ -225,8 +225,7 @@ def running(alpha: int, numbered_board: dict, screen) -> None:
                         elif [row, column] in clicked:
                             clicked = chord(row, column, alpha, numbered_board, screen, flagged, clicked)
 
-                            # Check if the max cells have been clicked by way of the length of clicked. If so, win.
-                            if len(clicked) == 71:
+                            if win_condition(clicked):
                                 time_end = time.time()
                                 time_elapsed = time_end - time_start
                                 win(screen, time_elapsed)
@@ -273,7 +272,6 @@ def chord(row: int, column: int, alpha: int, numbered_board: dict, screen, flagg
                         show_cell(row + i, column + j, alpha, screen, numbered_board, clicked)
                         if [row + i, column + j] not in clicked:
                             clicked.append([row + i, column + j])
-
     return clicked
 
 
@@ -465,6 +463,14 @@ def play_button(screen: pygame, rect_color: tuple, rect_position: pygame, text: 
         center=(rect_position[0] + rect_position[2] // 2, rect_position[1] + rect_position[3] // 2))
 
     screen.blit(text_surface, text_rect)
+
+
+def win_condition(clicked: list) -> bool:
+    """Check if the max cells have been clicked by way of the length of clicked. If so, win."""
+    if len(clicked) == 71:
+        print(clicked)
+        return True
+    return False
 
 
 if __name__ == "__main__":
