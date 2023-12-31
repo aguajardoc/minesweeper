@@ -1,4 +1,4 @@
-from project import get_cell, get_size, win_condition
+from game import get_cell, get_size, win_condition
 
 
 def test_get_cell():
